@@ -1,1 +1,1 @@
-# paintbydot
+# A&R Creative Suite™
