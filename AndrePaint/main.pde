@@ -432,7 +432,7 @@ void importFileSelected(File selection) {
   if (selection == null) return; //handle no selection
   String path = selection.getAbsolutePath();
   
-    if (!path.toLowerCase().endsWith(".png") ||
+    if (path.toLowerCase().endsWith(".png") ||
     path.toLowerCase().endsWith(".jpg") ||
     path.toLowerCase().endsWith(".jpeg") ||
     path.toLowerCase().endsWith(".tif")) {
