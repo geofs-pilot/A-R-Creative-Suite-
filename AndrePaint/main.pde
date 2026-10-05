@@ -42,8 +42,8 @@ boolean pmousePressed; //store whether mouse was down previous frame
 PImage selectedImage; //image that user selects for import
 
 void settings() {
-  size(640,480);
-  //fullScreen();
+  //size(640,480);
+  fullScreen();
 }
 
 
