@@ -231,17 +231,27 @@ void toolBar() { //create toolbar--lateral padding 30px
   stroke(0); //black outline
   line(700*px, menuBarHeight, 700*px, menuBarHeight+toolBarHeight); //create divider
   
-  //color selector lable
+  //color selector label
   fill(0); //set text color
   textSize(20*px); //set text size
   textAlign(CENTER, CENTER); //center-align text
   text("Colors", 987.5*px, menuBarHeight+toolBarHeight*0.15); //draw text
   //create color selector
   stroke(0); //black outline
-  button(730*px, menuBarHeight+toolBarHeight*0.35, 80*px, toolBarHeight*0.5, "Random", 0, 20*px, randomColor? UIHoverColor: toolBarColor, UIHoverColor, () -> {
+  button(730*px, menuBarHeight+toolBarHeight*0.3, 80*px, 40*px, "Random", 0, 20*px, randomColor? UIHoverColor: toolBarColor, UIHoverColor, () -> {
     randomColor = true;
   }
   );  //create random color button
+  button(730*px, menuBarHeight+toolBarHeight*0.7, 30*px, 30*px, "", 0, 20*px, 255, 255, () -> {
+    randomColor = false;
+    brushColor = color(255, 255, 255);
+  }
+  );  //create white color button
+  button(780*px, menuBarHeight+toolBarHeight*0.7, 30*px, 30*px, "", 0, 20*px, 0, 0, () -> {
+    randomColor = false;
+    brushColor = color(0, 0, 0);
+  }
+  );  //create black color button
   //create 3 rows of color options
   color[] rainbow = {
     color(255, 0, 0), //red
@@ -354,7 +364,7 @@ void toolSizeSlider(float x, float y, float slength, color scolor, color shoverC
   textAlign(LEFT, CENTER); //center text
   text(stext, x+10*px, y-25*px); //draw text
 
-  boolean hovering = mouseX >= x && mouseX <= x+slength && mouseY >= (y+trackHeight/2)-dotRad && mouseY <= (y+trackHeight/2)+dotRad; //checks if mouse is inside slider dot or on slider track
+  boolean hovering = mouseX >= x-dotRad && mouseX <= x+slength+dotRad && mouseY >= (y+trackHeight/2)-dotRad && mouseY <= (y+trackHeight/2)+dotRad; //checks if mouse is inside slider dot or on slider track
   fill(hovering? shoverColor: scolor); //fill hover color if hovering over slider dot, otherwise fill default color
 
   float brushSizeProgress = map(brushSize, brushSizeMin, brushSizeMax, 0, slength); //position dot on track based on value of brushSize
@@ -387,7 +397,7 @@ void toolOpacitySlider(float x, float y, float slength, color scolor, color shov
   textAlign(LEFT, CENTER); //center text
   text(stext, x+10*px, y-25*px); //draw text
 
-  boolean hovering = mouseX >= x && mouseX <= x+slength && mouseY >= (y+trackHeight/2)-dotRad && mouseY <= (y+trackHeight/2)+dotRad; //checks if mouse is inside slider dot or on slider track
+  boolean hovering = mouseX >= x-dotRad && mouseX <= x+slength+dotRad && mouseY >= (y+trackHeight/2)-dotRad && mouseY <= (y+trackHeight/2)+dotRad; //checks if mouse is inside slider dot or on slider track
   fill(hovering? shoverColor: scolor); //fill hover color if hovering over slider dot, otherwise fill default color
 
   float brushOpacityProgress = map(brushOpacity, brushOpacityMin, brushOpacityMax, 0, slength); //position dot on track based on value of brushOpacity
@@ -438,11 +448,15 @@ void importFileSelected(File selection) {
     path.toLowerCase().endsWith(".tif")) {
     selectedImage = loadImage(selection.getAbsolutePath()); //if file type valid, set selectedImage to that file
     
+    if (selectedImage == null) return; //handle file not loaded
+
     float scale = min( //fit canvas lengthwise or widthwise, whichever dimension is bigger in the image
       (float)canvasWidth / selectedImage.width,
       (float)canvasHeight / selectedImage.height
     );
-    image(selectedImage, canvasX+(canvasWidth-selectedImage.width*scale)/2, canvasY+(canvasHeight-selectedImage.height*scale), selectedImage.width*scale, selectedImage.height*scale //place and center image on canvas
+    clip(canvasX, canvasY, canvasWidth, canvasHeight);
+    image(selectedImage, canvasX+(canvasWidth-selectedImage.width*scale)/2, canvasY+(canvasHeight-selectedImage.height*scale)/2, selectedImage.width*scale, selectedImage.height*scale //place and center image on canvas
     );
+    noClip();
   }
 }
